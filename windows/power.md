@@ -57,7 +57,7 @@ Windows mostly uses wake timers with Windows Update, which is usually the primar
 
 #### Check
 
-You have this problem if your computer goes to sleep when you issue a lock command and wait a few minutes.
+You have this problem if your computer goes to sleep when you issue a lock command and wait a few minutes, even with sleep timeout set to Never.
 
 #### Fix
 
