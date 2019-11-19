@@ -27,7 +27,7 @@ To check if you have this problem: From an admin powershell run `powercfg -a`. I
 
 To fix it, open regedit and set `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\CsEnabled` to `0`. Reboot.
 
-Now `powercfg -a` should show one of the other standby states: S1, S2, or S3. If it doesn't, you're SOL.
+Now `powercfg -a` should show one of the other standby states: S1, S2, or S3. If it doesn't, you're SOL and will only have lock, hibernation, and poweroff as options.
 
 #### Explanation
 
