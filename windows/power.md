@@ -1,4 +1,4 @@
-Applies to: Windows 10, probably also 7/8/8.1. Check the last revision date on this document.
+Applies to: Windows 10, probably also 7/8/8.1. Check the last edited date on this document.
 
 This guide assumes you know your way around Windows and have already tried the usual suspects.
 
