@@ -61,7 +61,7 @@ You have this problem if your computer goes to sleep when you issue a lock comma
 
 #### Fix
 
-Go to Control Panel -> Power Options -> Change plan settings -> Change advanced power settings -> Sleep -> System unattended sleep timeout. Set to 0.
+Go to Control Panel -> Power Options -> Change plan settings -> Change advanced power settings -> Sleep -> System unattended sleep timeout. Set to 0. Note that this will also cause the system to not go back to sleep anymore after a wake timer triggers.
 
 If the option isn't available, set the registry key `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238C9FA8-0AAD-41ED-83F4-97BE242C8F20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0\Attributes` to `2`. Close and open the advanced power settings and you should see the option.
 
