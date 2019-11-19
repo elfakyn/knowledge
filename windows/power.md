@@ -27,11 +27,11 @@ To check if you have this problem: From an admin powershell run `powercfg -a`. I
 
 To fix it, open regedit and set `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\CsEnabled` to `0`. Reboot.
 
-Now `powercfg -a` should show one of the other standby states: S1, S2, or S3. If it doesn't, you're SOL and will only have lock, hibernation, and poweroff as options.
+Now `powercfg -a` should show one of the other standby states: S1, S2, or S3. If it doesn't, you're SOL and will have to choose between no sleep and S0 sleep.
 
 #### Explanation
 
-In this configuration, the computer executes a "connected standby" when it's asked to sleep. Processes still run but on certain laptops fans may not spin. Windows still draws an obscene amount of power. Other standby modes are disabled by Windows when this is enabled, which means that even if the system is capable of a more reasonable sleep, then it still won't do it.
+In this configuration, the computer executes a "connected standby" when it's asked to sleep. Processes still run but on certain laptops fans may not spin. Windows still draws an obscene amount of power. Other standby modes are disabled by Windows when this is enabled, which means that even if the system is capable of a more reasonable sleep, then it still won't do it. Applications such as Classic Start specifically look for S1, S2, or S3 and won't display the sleep option if it isn't one of these.
 
 ### Wake timers
 
