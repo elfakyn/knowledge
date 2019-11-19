@@ -1,10 +1,12 @@
-Applies to: Windows 10, probably also 7/8/8.1
+Applies to: Windows 10, probably also 7/8/8.1. Check the last revision date on this document.
 
 This guide assumes you know your way around Windows and have already tried the usual suspects.
 
-# Sleep
+# Windows power management problems
 
-Sleep is janky in windows. Certain settings will cause any or all of this to happen:
+## Rant (feel free to skip)
+
+Windows power management is a janky piece of shit that's made worse by inconsistent vendor implementation. Every fucking hardware manufacturer has its own ideas of what "sleep" and "low power" and "wake" mean resulting in a fucking patchwork of non-standards that all abuse the already crappy power management system in all sorts of horrible fucking ways (how about TURN OFF THE FANS BUT KEEP THE CPU RUNNING IN "SLEEP" MODE). Goddess forbid you have a fucking OEM license preinstalled, fuck knows what settings they set to ridiculous values and hid from you. The wake timers for Windows Update are absolutely bonkers. The system won't fucking go to sleep, or goes to sleep when it shouldn't, or doesn't sleep properly, or doesn't wake properly, what the fuck. Even fucking Linux has better power management today, when 10 years ago closing your laptop lid was a one way ticket to kernel panic land.
 
 ## Problems
 
@@ -61,7 +63,9 @@ You have this problem if your computer goes to sleep when you issue a lock comma
 
 #### Fix
 
-Go to Control Panel -> Power Options -> Change plan settings -> Change advanced power settings -> Sleep -> System unattended sleep timeout. Set to 0. Note that this will also cause the system to not go back to sleep anymore after a wake timer triggers.
+Go to Control Panel -> Power Options -> Change plan settings -> Change advanced power settings -> Sleep -> System unattended sleep timeout. Set to 0.
+
+Note that this will also cause the system to not go back to sleep anymore after a wake timer triggers. If it doesn't work make sure to revert this one.
 
 If the option isn't available, set the registry key `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238C9FA8-0AAD-41ED-83F4-97BE242C8F20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0\Attributes` to `2`. Close and open the advanced power settings and you should see the option.
 
