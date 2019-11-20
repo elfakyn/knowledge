@@ -4,7 +4,7 @@ This guide assumes you know your way around Windows and have already tried the u
 
 # Windows sleep problems
 
-## Rant (feel free to skip)
+## Rant
 
 Windows power management is a janky piece of shit that's made worse by inconsistent vendor implementation. Every fucking hardware manufacturer has its own ideas of what "sleep" and "low power" and "wake" mean resulting in a fucking patchwork of non-standards that all abuse the already crappy power management system in all sorts of horrible fucking ways (how about TURN OFF THE FANS BUT KEEP THE CPU RUNNING IN "SLEEP" MODE). Goddess forbid you have a fucking OEM license preinstalled, fuck knows what settings they set to ridiculous values and hid from you. The wake timers for Windows Update are absolutely bonkers. The system won't fucking go to sleep, or goes to sleep when it shouldn't, or doesn't sleep properly, or doesn't wake properly, what the fuck. Even fucking Linux has better power management today, when 10 years ago closing your laptop lid was a one way ticket to kernel panic land.
 
