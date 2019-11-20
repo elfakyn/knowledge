@@ -15,7 +15,7 @@ Problem | Solution
 Classic Start doesn't show the "sleep" option | Low power idle
 The computer overheats during sleep | Low power idle
 The computer randomly wakes up from sleep | Wake timers
-The computer goes to sleep soon after you lock it | System unattended sleep timeout
+The computer goes to sleep soon after you lock it | System unattended sleep timeout / Console lock display off timeout
     
 ## Solutions
 
@@ -55,7 +55,7 @@ If the option isn't available, set the registry key `HKEY_LOCAL_MACHINE\SYSTEM\C
 
 Windows mostly uses wake timers with Windows Update, which is usually the primary culprit, however other systems may rely on wake timers themselves. The above registry key controls whether the option is visible or not. You can find a list of other interesting registry keys by running `powercfg -q` (query). That list may not be exhaustive, [here's an exhaustive one](https://bitsum.com/known-windows-power-guids/).
 
-### System unattended sleep timeout
+### System unattended sleep timeout / Console lock display off timeout
 
 #### Check
 
