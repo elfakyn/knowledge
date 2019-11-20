@@ -2,7 +2,7 @@ Applies to: Windows 10, probably also 7/8/8.1. Check the last edited date on thi
 
 This guide assumes you know your way around Windows and have already tried the usual suspects.
 
-# Windows power management problems
+# Windows sleep problems
 
 ## Rant (feel free to skip)
 
