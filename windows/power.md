@@ -69,6 +69,8 @@ Note that this will also cause the system to not go back to sleep anymore after 
 
 If the option isn't available, set the registry key `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238C9FA8-0AAD-41ED-83F4-97BE242C8F20\7bc4a2f9-d8fc-4469-b07b-33eb785aaca0\Attributes` to `2`. Close and open the advanced power settings and you should see the option.
 
+If that doesn't work (such as on a Zenbook Pro Duo), set `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\8EC4B3A5-6868-48c2-BE75-4F3044BE88A7\Attributes` to `2` then in advanced power settings set Display -> Console lock display off timeout to 0. To get the screen to still blank out after a while and avoid burn-in, set a blank screensaver with a timeout of however many minutes you want. This seems a bit finicky so test that the screensaver triggers both while unlocked and while locked before relying on it.
+
 #### Explanation
 
-Windows has this hidden config where the system sleeps when it's unattended. The only way to reveal the option is to edit the above registry key. It's the same for all computers. You can find a list of other interesting registry keys by running `powercfg -q` (query). That list may not be exhaustive, [here's an exhaustive one](https://bitsum.com/known-windows-power-guids/).
+Windows has this hidden config where the system sleeps when it's unattended. The only way to reveal the option is to edit the above registry key. The primary purpose of this key is to set the go-back-to-sleep timeout for when wake timers wake the computer, but it has the side effect of affecting the sleep timeout on the lockscreen on some computers. If that doesn't work, it may be the case that a screen off triggers sleep, in which case we disable the "display off" timeout and replace it with a blank screensaver which doesn't turn off the display, but simply sets it to black.
