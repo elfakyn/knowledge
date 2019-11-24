@@ -86,7 +86,7 @@ Windows has this hidden config where the system sleeps when it's "unattended" as
 
 If your computer:
 1) Has no wake timers when you run `powercfg -waketimers` and/or `Get-ScheduledTask | ? {$_.Settings.WakeToRun}` (elevated prompt), and
-2) Wakes up precisely X minutes after sleeping (e.g. 3 hours)
+2) Wakes up precisely X minutes after sleeping (e.g. the computer always wakes up exactly 3 hours after it was put to sleep)
 
 Immediately when you notice that your computer has woken up, open eventvwr and go to Windows Logs -> System and check the approximate time when the device woke up. If you find an event with source "Power-Troubleshooter" and in the XML view you see a WakeSourceText of "ACPI Wake Alarm" then there's your problem.
 
