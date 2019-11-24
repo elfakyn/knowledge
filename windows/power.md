@@ -16,6 +16,9 @@ Classic Start doesn't show the "sleep" option | Low power idle
 The computer overheats during sleep | Low power idle
 The computer randomly wakes up from sleep | Wake timers
 The computer goes to sleep soon after you lock it | System unattended sleep timeout / Console lock display off timeout
+Windows Update is still a pain in the ass and still wakes your PC | <special guide for windows update coming soon>
+The computer wakes up exactly X minutes after you put it to sleep | Hibernation timers
+
     
 # Solutions
 
@@ -76,3 +79,21 @@ If that doesn't work (such as on a Zenbook Pro Duo), set `HKEY_LOCAL_MACHINE\SYS
 ### Explanation
 
 Windows has this hidden config where the system sleeps when it's "unattended" as an independent timer from the usual sleep timer. The primary purpose of this key is to set the go-back-to-sleep timeout for when wake timers wake the computer, but it has the side effect of affecting the sleep timeout on the lockscreen on some computers. If that doesn't work, it may be the case that a screen off triggers sleep, in which case we disable the "display off" timeout and replace it with a blank screensaver which doesn't turn off the display, but simply sets it to black.
+
+## Hibernation timers
+
+### Check
+
+If your computer:
+1) Has no wake timers when you run `powercfg -waketimers` and/or `Get-ScheduledTask | ? {$_.Settings.WakeToRun}` (elevated prompt), and
+2) Wakes up precisely X minutes after sleeping (e.g. 3 hours)
+
+Immediately when you notice that your computer has woken up, open eventvwr and go to Windows Logs -> System and check the approximate time when the device woke up. If you find an event with source "Power-Troubleshooter" and in the XML view you see a WakeSourceText of "ACPI Wake Alarm" then there's your problem.
+
+### Fix
+
+Go to  Control Panel -> Power Options -> Change plan settings -> Change advanced power settings -> Sleep -> Hibernate after and set both to 0 (Never).
+
+### Explanation
+
+ACPI wake timers are lower level and are not your usual wake timers. If I were to guess (and this may be completely wrong), Windows sets one of these to fire before the computer goes to sleep when it's configured to hibernate after a certain amount of time (end speculation). The computer will wake but fail to correctly go into hibernation, which results in you being hung out to dry. If you're lucky, it goes back to sleep and you never notice.
