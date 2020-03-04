@@ -9,4 +9,4 @@ It's a series of circumstances that makes it exceedingly easy to fuck up with ca
 Examples include:
 * Being allowed to push to the master branch of a monorepo with no guardrails.
 * NPM's "Add account to organization" feature that used to look like a search box. People thought they were searching for individuals in our NPM org but all they were doing was adding "joh" "john" and "johnny" to the org, with no confirmation dialog.
-* Whatever system Samsung had that made it so a random engineer could accidentally push notification "1 1" to every single phone.
+* Whatever system Samsung had that made it so a random engineer could accidentally push notification "1 1" to LITERALLY EVERY PHONE IN THE UNIVERSE.
