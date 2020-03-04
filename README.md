@@ -2,7 +2,7 @@
 
 No bullshit documentation. Only what you need, copy paste snippets, and the like, with short explanations.
 
-## You use that term a lot. What's a spaghetti factory?
+## You use "spaghetti factory" a lot. What's it mean?
 
 It's a series of circumstances that makes it exceedingly easy to fuck up with catastrophic results. A spaghetti factory invites human error and even tricks humans into making mistakes.
 
