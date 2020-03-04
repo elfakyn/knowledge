@@ -1,4 +1,3 @@
-# Knowledge
-Documentation of random jank all over the place.
+# Fast Knowledge
 
-## This assumes you already know what you're doing and are looking for very niche information!!
+No bullshit documentation. Only what you need, copy paste snippets.
