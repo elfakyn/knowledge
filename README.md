@@ -2,6 +2,8 @@
 
 No bullshit documentation. Only what you need, copy paste snippets, and the like, with short explanations.
 
+This will hopefully reduce the incidence of spaghetti factories in organizations.
+
 ## You use "spaghetti factory" a lot. What's it mean?
 
 It's a series of circumstances that makes it exceedingly easy to fuck up with catastrophic results. A spaghetti factory invites human error and even tricks humans into making mistakes.
