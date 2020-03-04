@@ -47,6 +47,10 @@ The `CrossAccount` statement allows entities in 111111111111 to push to the SNS 
 
 ## FAQ
 
+### Can I restrict these further? I don't want to give a whole account access.
+
+YES! Use specific principal ARNs in the first one and add further conditions in the second one.
+
 ### What if I need more than one account to publish to this SNS?
 
 You can add multiple `Principal`s and/or multiple `SourceOwner`s in the list, you don't need a whole separate `Statement` for each account.
