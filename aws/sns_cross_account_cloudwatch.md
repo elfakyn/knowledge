@@ -43,7 +43,7 @@ That's all, pop it and ship it!
 
 ## Explanation
 
-The `CrossAccount` statement allows entities in 111111111111 to push to the SNS topic. But for some reason that doesn't work with CloudWatch. Instead, you'll need the `CrossAccountWithCloudWatch` statement.
+The `CrossAccount` statement allows entities in 111111111111 to push to the SNS topic like any normal cross-account policy, with an account principal. But for some reason that doesn't work with CloudWatch. Instead, you need to use `SourceOwner` as a condition key. I don't like having `*` in the principal, it's a spaghetti factory, but I couldn't find another way. Submit a PR if you do.
 
 ## FAQ
 
