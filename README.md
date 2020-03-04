@@ -2,7 +2,7 @@
 
 No bullshit documentation. Only what you need, copy paste snippets, and the like, with short explanations.
 
-This will hopefully reduce the incidence of spaghetti factories in organizations.
+This will hopefully reduce the incidence of spaghetti factories.
 
 ## You use "spaghetti factory" a lot. What's it mean?
 
