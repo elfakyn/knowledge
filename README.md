@@ -12,3 +12,4 @@ Examples include:
 * Being allowed to just push to the master branch of a monorepo.
 * NPM's "Add account to organization" feature used to look like a search box. People thought they were searching for individuals in our NPM org but all they were doing was adding "joh" "john" and "johnny" to the org, with no confirmation dialog.
 * Whatever system Samsung had that made it so a random engineer could accidentally push notification "1 1" to LITERALLY EVERY PHONE IN THE UNIVERSE.
+* A command that's destructive by default with a `--nondestructive` flag insead of being nondestructive by default with a `--destructive` flag.
