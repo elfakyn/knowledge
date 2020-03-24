@@ -1,6 +1,6 @@
 # Lambda metric alarm
 
-When you create a lambda metric alarm you really don't want to have to think about it. Here's the values
+When you create a lambda metric alarm you really don't want to have to think about it. Here's the values (in terraform, but you can use the same ones in cloudformation):
 
 ```terraform
 resource "aws_cloudwatch_metric_alarm" "mylambda_error_alarm" {
