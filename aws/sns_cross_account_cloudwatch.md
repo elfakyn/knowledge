@@ -1,6 +1,6 @@
-# Posting Cloudwatch alarms to SNS cross account
+# Posting to SNS cross account
 
-You have a CloudWatch alarm in account 111111111111 and you need it to post to an SNS topic in account 222222222222. How to do this?
+You have a CloudWatch alarm or lambda in account 111111111111 and you need it to post to an SNS topic in account 222222222222. How to do this?
 
 There's no special configuration needed in account 111111111111. All you need is the following policy on the SNS topic in account 222222222222.
 
