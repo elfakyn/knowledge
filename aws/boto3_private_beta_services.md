@@ -13,7 +13,11 @@ my_project /
       - service-2.json
 ```
 
-2. Set the environment variable `AWS_DATA_PATH` to point to `my_project` (do this before you call `boto3.client`). You can do this in `my_program.py`: `os.environ['AWS_DATA_PATH'] = os.path.dirname(os.path.realpath(__file__))`.
+2. Set the environment variable `AWS_DATA_PATH` to point to `my_project` (do this before you call `boto3.client`). You can do this in `my_program.py`:
+
+```python
+os.environ['AWS_DATA_PATH'] = os.path.dirname(os.path.realpath(__file__))
+```
 
 3. Use the following boto3 call to create the client:
 
