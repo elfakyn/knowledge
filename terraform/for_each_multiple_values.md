@@ -14,7 +14,7 @@ resource "azurerm_resource_group" "rg" {
 }
 ```
 
-But they never tell you what to do if you want to have more than one value in each one of them. It's easy:
+But they never tell you what to do if you want to access more than one value. It's easy:
 
 ```
 variable "rg_locations" {
