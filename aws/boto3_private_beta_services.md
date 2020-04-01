@@ -43,7 +43,7 @@ Yes.
 
 ### Does it have to have that exact directory structure?
 
-Yes. `service_name/YYYY-MM-DD/service-2.json`. The service name has to match the `signingName` and the date has to match the `apiVersion` date. Chec in the json file AWS gave you.
+Yes. `service_name/YYYY-MM-DD/service-2.json`. The service name has to match the `signingName` and the date has to match the `apiVersion` date. Check in the json file AWS gave you.
 
 ### What if I need to provide a specific endpoint URL?
 
