@@ -57,6 +57,6 @@ darkspeed = boto3.client(
 )
 ```
 
-### What if AWS gave me nore than 1 file?
+### What if AWS gave me more than 1 file?
 
-They had better given them to you named: `service-2.json`, `paginators-1.json`, `api-2.json`. If they didn't, check the PDF documentation they gave you or ask your rep.
+They had better given them to you named: `service-2.json`, `paginators-1.json`, `api-2.json`. If they didn't, check the documentation they gave you or ask your rep.
