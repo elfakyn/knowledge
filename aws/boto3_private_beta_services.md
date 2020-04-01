@@ -39,11 +39,11 @@ print(velocity)
 
 ### Does it have to be called `service-2.json`?
 
-Yes.
+Yes. `service-1` is the old version, all closed betas I'm aware of are `service-2`.
 
 ### Does it have to have that exact directory structure?
 
-Yes. `service_name/YYYY-MM-DD/service-2.json`. The service name has to match the `signingName` and the date has to match the `apiVersion` date. Check in the json file AWS gave you.
+Yes. `service_name/YYYY-MM-DD/service-2.json`. Check inside the json file. The service name has to match the `signingName` and the date has to match the `apiVersion` date. 
 
 ### What if I need to provide a specific endpoint URL?
 
@@ -60,3 +60,8 @@ darkspeed = boto3.client(
 ### What if AWS gave me more than 1 file?
 
 They had better given them to you named: `service-2.json`, `paginators-1.json`, `api-2.json`. If they didn't, check the documentation they gave you or ask your rep.
+
+#### References
+
+* [Loaders reference -- found this AFTER I wrote this whole thing](https://botocore.amazonaws.com/v1/documentation/api/latest/reference/loaders.html)
+* [Boto3 session reference](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html)
