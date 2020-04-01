@@ -1,6 +1,6 @@
 # Using private beta services with boto3
 
-You've been invited to the private beta of a new AWS service, 'darkspeed'. Boto3 doesn't have that service yet, but AWS has given you a json file with the service definition (`darkspeed-2018-07-06.normal.json`. How do you access it in boto3?
+You've been invited to the private beta of a new AWS service, 'darkspeed'. Boto3 doesn't have that service yet, but AWS has given you a json file with the service definition (`darkspeed-2018-07-06.normal.json`). How do you access it in boto3?
 
 1. Rename the service definition file to `service-2.json` and put it in the following directory structure:
 
