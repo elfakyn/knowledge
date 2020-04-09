@@ -7,7 +7,7 @@ Setting in console | Setting in CLI | What it does | Side effects
 Block public access to buckets and objects granted through new access control lists | BlockPublicAcls | Can't create new public bucket or object ACLs |
 Block public access to buckets and objects granted through any access control lists | IgnorePublicAcls | Ignores all public  bucket or object ACLs |
 Block public access to buckets and objects granted through new public bucket policies | BlockPublicPolicy | Can't create new public policies |
-Block public and cross-account access to buckets and objects through any public bucket policies | RestrictPublicBuckets | Can't create new public **and cross-account** bucket policies, ignores existing public **and cross-account** bucket policies | Weird 500 errors on cross account policies
+Block public and cross-account access to buckets and objects through any public bucket policies | RestrictPublicBuckets | Can't create new public **and cross-account** bucket policies (this bit isn't documented and appears to be unintended behavior), ignores existing public **and cross-account** bucket policies | Weird 500 errors on cross account policies
 
 ## I'm getting 500 errors on PutBucketPolicy, help!
 
