@@ -1,4 +1,4 @@
-# AWS managed policies that give too much access
+# AWS managed policies that give problematic permissions
 
 Some AWS managed policies are obviously dangerous such as `IAMFullAccess`. But did you know `AWSCloudTrailReadOnlyAccess` gives you read access to every object in s3?
 
