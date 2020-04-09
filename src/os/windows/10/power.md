@@ -2,6 +2,8 @@ Applies to: Windows 10, probably also 7/8/8.1. Check the last edited date on thi
 
 This guide assumes you know your way around Windows and have already tried the usual suspects.
 
+**Last updated:** Jan 2020
+
 # Windows sleep problems
 
 ## Rant
@@ -19,7 +21,7 @@ The computer goes to sleep soon after you lock it | System unattended sleep time
 Windows Update is still a pain in the ass and still wakes your PC | <special guide for windows update coming soon>
 The computer wakes up exactly X minutes after you put it to sleep | Hibernation timers
 
-    
+
 # Solutions
 
 ## Low power idle
