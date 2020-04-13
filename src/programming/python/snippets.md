@@ -1,4 +1,4 @@
-## Get a fucking UTC ISO 8601 from timestamp.
+## Get a fucking UTC ISO 8601 Z from timestamp.
 
 ```python
 datetime.datetime.fromtimestamp(unix_time_milliseconds // 1000, tz=datetime.timezone.utc).isoformat().replace('+00:00', 'Z')
