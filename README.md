@@ -11,3 +11,4 @@ It's a series of circumstances that tricks you into fucking up with catastrophic
 Real-life examples include:
 * NPM's "Add account to organization" feature used to look like a search box. People thought they were searching for individuals in our NPM org but all they were doing was adding "joh" "john" and "johnny" to the org, with no confirmation dialog.
 * A command that's destructive by default with a `-d` flag that means "nondestructive"
+* The GitHub "Restrict who can push to matching branches" setting in GitHub actually EXPANDS permissions if "Require pull request reviews before merging" is checked.
