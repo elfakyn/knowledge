@@ -3,7 +3,7 @@
 Some permissions don't do what their name suggests.
 
 Permission name | What it actually does | Access level | Docs
---- | --- | ---
+--- | --- | --- | ---
 `glue:GetMapping` | Creates a mapping | WRITE | [[1]](https://docs.aws.amazon.com/en_us/IAM/latest/UserGuide/list_awsglue.html)
 
 # Phantom actions
