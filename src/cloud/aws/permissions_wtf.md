@@ -2,9 +2,9 @@
 
 Some permissions don't do what their name suggests.
 
-Permission name | What it actually does | Access level | Docs
+Permission name | What it actually does | Access level | Link
 --- | --- | --- | ---
-`glue:GetMapping` | Creates a mapping | WRITE | [[1]](https://docs.aws.amazon.com/en_us/IAM/latest/UserGuide/list_awsglue.html)
+`glue:GetMapping` | Creates a mapping | WRITE | [aws docs](https://docs.aws.amazon.com/en_us/IAM/latest/UserGuide/list_awsglue.html)
 
 # Phantom actions
 
