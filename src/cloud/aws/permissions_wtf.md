@@ -4,7 +4,7 @@ Some permissions don't do what their name suggests.
 
 Permission name | What it actually does | Access level
 --- | --- | ---
-glue:GetMapping | Creates a mapping | WRITE
+`glue:GetMapping` | Creates a mapping | WRITE
 
 # Phantom actions
 
