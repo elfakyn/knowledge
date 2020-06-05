@@ -35,12 +35,12 @@ or like this:
 
 Don't try again; it won't work. The error is likely due to one of the following reasons:
 
-## You have `RestrictPublicBuckets` in your bucket public access block and are trying to put a cross-account-policy
+## You are trying to put a cross-account policy with `RestrictPublicBuckets` enabled
 
 ### Background
 
 What the issue is:
-* You have a public access block on your bucket and `RestrictPublicBuckets` is enabled (also known as "Block public and cross-account access to buckets and objects through any public bucket policies")
+* You have a public access block on your bucket with `RestrictPublicBuckets` enabled (also known as "Block public and cross-account access to buckets and objects through any public bucket policies")
 * You are trying to put a bucket policy that grants cross-account access to the bucket
 
 Why this happens:
@@ -56,10 +56,29 @@ Disable `RestrictPublicBuckets` ("Block public and cross-account access to bucke
 
 Not all malformed policies will result in a `MalformedPolicy` error. 
 
-Here's an example of a policy that will give you a 500:
+Here's an example of a policy that will give you a 500 error:
 
-<COMING SOON>
+```json
+{
+    "Version": "2012-10-17",
+    "Id": "whatever",
+    "Statement": [
+        {
+            "Sid": "ReadOnly",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": []
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::my-bucket/*"
+        }
+    ]
+}
+```
 
 ### How to fix
 
-Your policy can't have an empty array as a principal. Remove the statement.
+Fix your policy.
+
+Potential causes:
+* Policy statements can't have an empty array as a principal. Add a principal or remove the statement entirely.
