@@ -1,0 +1,44 @@
+
+GitHub Support <no-reply@github.com>
+Wed, Apr 22, 6:04 PM
+to me
+
+Hi elfakyn,
+
+We’re writing to let you know that on April 15, non-admin repository members were briefly able to override branch protection settings and merge pull requests when branch protection rules weren't met. Specifically, these non-admin users were already allowed to push to protected branches.
+
+If you are receiving this email, you administer or own a repository that allowed a non-admin user to merge a pull request to a protected branch during the timeframe, and you may want to review merged pull requests.
+
+GitHub itself did not experience a compromise, data breach, or data exposure as a result of this event, nor did unauthorized users gain access to repositories. User privacy and security are essential, and we want to remain as transparent as possible about events like these. Read on for more information.
+
+* What Happened? *
+
+GitHub Security learned that non-admin users who were granted the ability to push to protected branches were able to override branch protection features and merge pull requests to protected branches on April 15, between approximately 09:39 AM and 03:01 PM PDT.
+
+GitHub immediately fixed the problem and began investigating the events to identify affected repositories.
+
+* What Information Was Involved? *
+
+The following repositories had at least one unauthorized pull request merged by a non-admin user when branch protection rules weren’t met:
+
+repository,merging_user
+[REDACTED]
+
+Again, no repository contents were exposed to unauthorized parties on GitHub.com; any users affected by this event already had valid permissions on the repositories noted above.
+
+* What GitHub Is Doing *
+
+GitHub immediately fixed the bug and notified all affected users. We are also performing an internal assessment to determine how we can better prevent this sort of bug in the future.
+
+* What You Can Do *
+
+Review and confirm pull requests merged on April 15th for the repositories listed above. While anyone merging content would already have some level of access to the repositories, the merged content may have been unexpected. Although these settings would not have changed as a result of this event, you may also wish to review branch protection settings:
+
+https://help.github.com/en/github/administering-a-repository/about-protected-branches
+
+Please feel free to reach out to us with any additional questions or concerns through this contact form: https://github.com/contact?form%5Bsubject%5D=Re:Reference+[REDACTED].
+
+Thanks,
+GitHub Support
+
+<Reference # [REDACTED]>
