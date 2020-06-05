@@ -11,4 +11,31 @@ Block public and cross-account access to buckets and objects through any public 
 
 ## I'm getting 500 errors on PutBucketPolicy, help!
 
-It's because you've enabled `RestrictPublicBuckets` and are trying to put a cross-account policy. Disable it and it'll work. Really? A 500 error? Really.
+It's because you've enabled `RestrictPublicBuckets` and are trying to put a cross-account policy. Disable it and it'll work.
+
+Here's the error you will get if you try to put a cross-account policy with `RestrictPublicBuckets` enabled:
+
+```
+{
+  "Error": {
+    "Code": "InternalError",
+    "Message": "We encountered an internal error. Please try again."
+  },
+  "ResponseMetadata": {
+    "HTTPHeaders": {
+      "connection": "close",
+      "content-type": "application/xml",
+      "date": "Fri, 05 Jun 2020 16:43:12 GMT",
+      "server": "AmazonS3",
+      "transfer-encoding": "chunked",
+      "x-amz-id-2": "00000000000000/1111111111111111/22222222222222222222222222222222=",
+      "x-amz-request-id": "AAAAAAAAAAAAAAA"
+    },
+    "HTTPStatusCode": 500,
+    "HostId": "00000000000000/1111111111111111/22222222222222222222222222222222=",
+    "MaxAttemptsReached": true,
+    "RequestId": "AAAAAAAAAAAAAAA",
+    "RetryAttempts": 4
+  }
+}
+```
