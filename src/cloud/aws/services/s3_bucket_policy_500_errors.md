@@ -2,7 +2,7 @@
 
 ## What the error looks like
 
-Sometimes AWS spits a cryptic error:
+Sometimes s3 spits out a cryptic error:
 
 ![Big red error message in the AWS Console. The title of the error is "Error" and the text of the error is "We encountered an internal error. Please try again."](/assets/images/aws_s3_put_policy_500_internal_error.png)
 
