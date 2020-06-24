@@ -1,5 +1,9 @@
 ## Timezone madness
 
+```python
+import datetime
+```
+
 ### Timestamp milliseconds to zulu time
 
 ```python
