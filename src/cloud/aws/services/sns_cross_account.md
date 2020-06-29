@@ -43,7 +43,7 @@ If you only use CloudWatch to post to this SNS, you only need the `CrossAccountW
 
 That's all, pop it and ship it!
 
-**Note:** Since this will replace the default SNS access policy ([which is the thing that grants access inside the same account to publish SNS](https://docs.aws.amazon.com/sns/latest/dg/sns-access-policy-use-cases.html)), you're going to have to explicitly grant the original account (222222222222) access to the SNS topic if you want to publish inside the account as well. (I haven't tested this)
+**Note:** Since this will replace the default SNS access policy ([which is the thing that grants access inside the same account to publish SNS](https://docs.aws.amazon.com/sns/latest/dg/sns-access-policy-use-cases.html)), you're going to have to explicitly grant the original account (222222222222) access to the SNS topic again if you want to publish inside the account as well.
 
 ## Explanation
 
