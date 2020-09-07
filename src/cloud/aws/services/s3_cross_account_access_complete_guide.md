@@ -15,14 +15,14 @@ AWS's documentation is confusing and contradictory on this matter. Let's take a 
   * [What AWS tells you...](#what-aws-tells-you)
     + [How to grant cross-account access](#how-to-grant-cross-account-access)
     + [Example](#example)
-  * [What AWS doesn't tell you: how bucket policies ACTUALLY work](#what-aws-doesn-t-tell-you--how-bucket-policies-actually-work)
+  * [What AWS doesn't tell you: how bucket policies ACTUALLY work](#what-aws-doesnt-tell-you-how-bucket-policies-actually-work)
     + [Saving and retrieving bucket policies](#saving-and-retrieving-bucket-policies)
-    + [AWS's internal representation](#aws-s-internal-representation)
-  * [So what's the problem?](#so-what-s-the-problem-)
-    + [If a user is deleted, all bucket policies with that user will appear to have changed](#if-a-user-is-deleted--all-bucket-policies-with-that-user-will-appear-to-have-changed)
-    + [If you delete a user/role and create one with the same ARN, all resource-based access will break](#if-you-delete-a-user-role-and-create-one-with-the-same-arn--all-resource-based-access-will-break)
+    + [AWS's internal representation](#awss-internal-representation)
+  * [So what's the problem?](#so-whats-the-problem)
+    + [If a user is deleted, all bucket policies with that user will appear to have changed](#if-a-user-is-deleted-all-bucket-policies-with-that-user-will-appear-to-have-changed)
+    + [If you delete a user/role and create one with the same ARN, all resource-based access will break](#if-you-delete-a-userrole-and-create-one-with-the-same-arn-all-resource-based-access-will-break)
         - [The AWS documentation is plain wrong](#the-aws-documentation-is-plain-wrong)
-    + [You can't create a bucket policy before you've created the principal that is granted access](#you-can-t-create-a-bucket-policy-before-you-ve-created-the-principal-that-is-granted-access)
+    + [You can't create a bucket policy before you've created the principal that is granted access](#you-cant-create-a-bucket-policy-before-youve-created-the-principal-that-is-granted-access)
     + [Certain bucket policies will result in a cryptic 500 error](#certain-bucket-policies-will-result-in-a-cryptic-500-error)
   * [Security Implications](#security-implications)
     + [Brute-forcing valid principal names is possible](#brute-forcing-valid-principal-names-is-possible)
@@ -31,9 +31,7 @@ AWS's documentation is confusing and contradictory on this matter. Let's take a 
     + [Canonical IDs offer no extra security](#canonical-ids-offer-no-extra-security)
   * [Conclusion](#conclusion)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-## A necessary refresher: how access works in AWS
+## A necessary refresher: how access works in AWS, and why cross-account access is different
 
 Feel free to skip this if you have a really good understanding of AWS access.
 
