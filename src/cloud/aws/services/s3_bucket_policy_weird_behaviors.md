@@ -254,6 +254,8 @@ And now you delete user `Test`. The bucket policy will now show
 }
 ```
 
+The bucket policy never actually changed. It is now displayed differently to you because the internally-stored ID can no longer be converted back into an ARN for display purposes.
+
 
 ### If you delete a user/role and create one with the same ARN, all resource-based access will break
 
@@ -268,7 +270,7 @@ To fix the problem, you have to manually go to all bucket policies and replace t
 
 The same happens with roles, except it displays `AROAxxxxxxxxxxxxxxxxx`
 
-Access within the same account will break if it is granted using the bucket policy (and not an identity-based policy). But typically, same-account s3 access is granted using identity-based policies and not bucket policies, so access will not break in most cases.
+Access within the same account will break if it is granted using the bucket policy (and not an identity-based policy). But typically, same-account s3 access is granted using identity-based policies and not bucket policies, so same-account access will not break in most cases.
 
 #### The AWS documentation is plain wrong
 
@@ -284,7 +286,7 @@ This one is pretty self-explanatory. If a principal does not exist when you crea
 
 ### Certain bucket policies will result in a cryptic 500 error
 
-If a bucket policy is invalid in such a way that it breaks the parsing logic, it will return a 500 error instead of anything useful. Here's one such example: 
+If a bucket policy is invalid in such a way that it breaks the internal validator, it will return a 500 error instead of anything useful. Here's one such example: 
 
 ```json
 {
