@@ -1,5 +1,7 @@
 # What You See is Not What You Get: An Extensive Guide to Weird Behaviors and Security Pitfalls in S3 Bucket Policies
 
+Have you ever seen an S3 bucket policy change itself with no human intervention?
+
 Have you ever encountered a 500 "Please try again later" error when setting an s3 bucket policy?
 
 Ever wondered why you got "Invalid Principal" when writing a bucket policy, even though there's nothing obviously wrong?
