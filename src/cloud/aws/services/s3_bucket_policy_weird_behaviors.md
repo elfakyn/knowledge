@@ -180,6 +180,8 @@ Further discussion on identity-based policies work is outside the scope of this 
 
 **The JSON that you've seen so far for bucket policies is not the actual internal representation of a bucket policy.** In a bucket policy, what you see is not what you actually get, and this is the source of many problems.
 
+There is some amount of guesswork in what follows since I don't have internal AWS access, but to my knowledge this is how things work in effect (it may be implemented differently).
+
 ### Saving and retrieving bucket policies
 
 When you click "save" on a bucket policy:
