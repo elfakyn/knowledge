@@ -1,6 +1,12 @@
 # What You See is Not What You Get: An Extensive Guide to Weird Behaviors and Security Pitfalls in S3 Bucket Policies
 
-Have you ever encountered a 500 "Please try again later" error when setting an s3 bucket policy? Ever wondered why you got "Invalid principal" when writing a bucket policy, even though there's nothing obviously wrong? Why is that one old bucket showing access to `AIDAXYZTABCDEFGHIJK` when you've clearly never put anything like that in? And what the hell is a Canonical ID?
+Have you ever encountered a 500 "Please try again later" error when setting an s3 bucket policy?
+
+Ever wondered why you got "Invalid Principal" when writing a bucket policy, even though there's nothing obviously wrong?
+
+Why is that one old bucket showing access to `AIDAXYZTABCDEFGHIJK` when you've clearly never put anything like that in?
+
+And what the hell is a Canonical ID?
 
 AWS's documentation is confusing and contradictory on this matter. Let's take a deeper dive.
 
