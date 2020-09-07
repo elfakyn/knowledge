@@ -213,7 +213,7 @@ Further reading:
 
 * [Finding your account canonical ID](https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html#findingcanonicalid)
 * [Finding the IAM identifiers (Principal IDs)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-unique-ids)
-* [Principal IDs, and AWS warnings on how cross-account access will break](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) This is a fairly obscure piece of documentation.
+* [Principal IDs, and AWS warnings on how cross-account access will break](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html). This is a fairly obscure piece of documentation.
 
 ## So what's the problem?
 
@@ -240,7 +240,7 @@ Let's say you have this bucket policy:
 }
 ```
 
-And now you delete user `Test`. The bucket policy will now show
+And now you delete the user `Test`. The bucket policy will now show:
 
 ```json
 {
@@ -261,7 +261,7 @@ And now you delete user `Test`. The bucket policy will now show
 }
 ```
 
-The bucket policy never actually changed. It is now displayed differently to you because the internally-stored ID can no longer be converted back into an ARN for display purposes.
+*The bucket policy never actually changed.* It is now displayed differently to you because the internally-stored ID can no longer be converted back into an ARN for display purposes.
 
 ### You cannot edit a bucket policy that references a deleted principal
 
