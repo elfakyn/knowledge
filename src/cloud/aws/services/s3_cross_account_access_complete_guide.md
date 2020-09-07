@@ -6,28 +6,29 @@ AWS's documentation is confusing and contradictory on this matter. Let's take a 
 
 ## Table of Contents
 
-* [A necessary refresher: how access works in AWS, and why cross-account access is different](#a-necessary-refresher--how-access-works-in-aws--and-why-cross-account-access-is-different)
+  * [Table of Contents](#table-of-contents)
+  * [A necessary refresher: how access works in AWS, and why cross-account access is different](#a-necessary-refresher--how-access-works-in-aws--and-why-cross-account-access-is-different)
     + [IAM policies](#iam-policies)
     + [Examples](#examples)
     + [How policies interact](#how-policies-interact)
-* [What AWS tells you...](#what-aws-tells-you)
+  * [What AWS tells you...](#what-aws-tells-you)
     + [How to grant cross-account access](#how-to-grant-cross-account-access)
     + [Example](#example)
-* [What AWS doesn't tell you: how bucket policies ACTUALLY work](#what-aws-doesn-t-tell-you--how-bucket-policies-actually-work)
+  * [What AWS doesn't tell you: how bucket policies ACTUALLY work](#what-aws-doesn-t-tell-you--how-bucket-policies-actually-work)
     + [Saving and retrieving bucket policies](#saving-and-retrieving-bucket-policies)
     + [AWS's internal representation](#aws-s-internal-representation)
-* [So what's the problem?](#so-what-s-the-problem-)
+  * [So what's the problem?](#so-what-s-the-problem-)
     + [If a user is deleted, all bucket policies with that user will appear to have changed](#if-a-user-is-deleted--all-bucket-policies-with-that-user-will-appear-to-have-changed)
     + [If you delete a user/role and create one with the same ARN, all resource-based access will break](#if-you-delete-a-user-role-and-create-one-with-the-same-arn--all-resource-based-access-will-break)
-        * [AWS documentation is plain wrong](#aws-documentation-is-plain-wrong)
+        - [The AWS documentation is plain wrong](#the-aws-documentation-is-plain-wrong)
     + [You can't create a bucket policy before you've created the principal that is granted access](#you-can-t-create-a-bucket-policy-before-you-ve-created-the-principal-that-is-granted-access)
     + [Certain bucket policies will result in a cryptic 500 error](#certain-bucket-policies-will-result-in-a-cryptic-500-error)
-* [Security Implications](#security-implications)
+  * [Security Implications](#security-implications)
     + [Brute-forcing valid principal names is possible](#brute-forcing-valid-principal-names-is-possible)
     + [User compromise will break cross-account access](#user-compromise-will-break-cross-account-access)
     + [Explicit denies will stop working if the principal is deleted and recreated](#explicit-denies-will-stop-working-if-the-principal-is-deleted-and-recreated)
     + [Canonical IDs offer no extra security](#canonical-ids-offer-no-extra-security)
-* [Conclusion](#conclusion)
+  * [Conclusion](#conclusion)
 
 ## A necessary refresher: how access works in AWS, and why cross-account access is different
 
