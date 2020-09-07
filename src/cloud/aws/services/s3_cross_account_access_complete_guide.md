@@ -266,7 +266,7 @@ Access within the same account will break if it is granted using the bucket poli
 
 > Suppose that the employee named David leaves your company and you delete the corresponding IAM user. But later another employee named David starts and you create a new IAM user named David. If the bucket policy specifies the David IAM user, the policy allows the new David to access information that was left by the former David.
 
-I have tested this, and it is incorrect. If you view the bucket policy, it will show the old Principal ID. 
+I have tested this, and it is incorrect. If you view the bucket policy, it will show the old Principal ID and will not retain the user ARN, even within the same account.
 
 ### You can't create a bucket policy before you've created the principal that is granted access
 
