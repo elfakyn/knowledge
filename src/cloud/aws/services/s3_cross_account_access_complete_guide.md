@@ -1,25 +1,27 @@
 # Table of Contents
 
-  * [A necessary refresher: how access works in AWS, and why cross-account access is different](#a-necessary-refresher--how-access-works-in-aws--and-why-cross-account-access-is-different)
+* [A necessary refresher: how access works in AWS, and why cross-account access is different](#a-necessary-refresher--how-access-works-in-aws--and-why-cross-account-access-is-different)
     + [IAM policies](#iam-policies)
     + [Examples](#examples)
     + [How policies interact](#how-policies-interact)
-  * [What AWS tells you...](#what-aws-tells-you)
+* [What AWS tells you...](#what-aws-tells-you)
     + [How to grant cross-account access](#how-to-grant-cross-account-access)
     + [Example](#example)
-  * [What AWS doesn't tell you: how bucket policies ACTUALLY work](#what-aws-doesn-t-tell-you--how-bucket-policies-actually-work)
+* [What AWS doesn't tell you: how bucket policies ACTUALLY work](#what-aws-doesn-t-tell-you--how-bucket-policies-actually-work)
     + [Saving and retrieving bucket policies](#saving-and-retrieving-bucket-policies)
     + [AWS's internal representation](#aws-s-internal-representation)
-  * [So what's the problem?](#so-what-s-the-problem-)
+* [So what's the problem?](#so-what-s-the-problem-)
     + [If a user is deleted, all bucket policies with that user will appear to have changed](#if-a-user-is-deleted--all-bucket-policies-with-that-user-will-appear-to-have-changed)
-    + [If you delete a user/role and create one with the same ARN, all cross-account access will break](#if-you-delete-a-user-role-and-create-one-with-the-same-arn--all-cross-account-access-will-break)
+    + [If you delete a user/role and create one with the same ARN, all resource-based access will break](#if-you-delete-a-user-role-and-create-one-with-the-same-arn--all-resource-based-access-will-break)
+        * [AWS documentation is plain wrong](#aws-documentation-is-plain-wrong)
     + [You can't create a bucket policy before you've created the principal that is granted access](#you-can-t-create-a-bucket-policy-before-you-ve-created-the-principal-that-is-granted-access)
     + [Certain bucket policies will result in a cryptic 500 error](#certain-bucket-policies-will-result-in-a-cryptic-500-error)
-  * [Security Implications](#security-implications)
+* [Security Implications](#security-implications)
     + [Brute-forcing valid principal names is possible](#brute-forcing-valid-principal-names-is-possible)
     + [User compromise will break cross-account access](#user-compromise-will-break-cross-account-access)
     + [Explicit denies will stop working if the principal is deleted and recreated](#explicit-denies-will-stop-working-if-the-principal-is-deleted-and-recreated)
     + [Canonical IDs offer no extra security](#canonical-ids-offer-no-extra-security)
+* [Conclusion](#conclusion)
 
 # A Complete Guide to S3 Cross-Account Access and Security Pitfalls
 
@@ -193,6 +195,7 @@ What you see | What AWS stores internally
 Further reading:
 
 * [Finding your account canonical ID](https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html#findingcanonicalid)
+* [Finding the IAM identifiers (Principal IDs)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-unique-ids)
 * [Principal IDs, and AWS warnings on how cross-account access will break](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) This is a fairly obscure piece of documentation.
 
 ## So what's the problem?
@@ -242,7 +245,7 @@ And now you delete user `Test`. The bucket policy will now show
 ```
 
 
-### If you delete a user/role and create one with the same ARN, all cross-account access will break
+### If you delete a user/role and create one with the same ARN, all resource-based access will break
 
 All users have an internal unique ID, called a "Principal ID" (of the form `AIDAxxxxxxxxxxxxxxxxx`), that is distinct from the ARN of the user. When you delete a user and create one with the same ARN, its Principal ID changes.
 
@@ -256,6 +259,14 @@ To fix the problem, you have to manually go to all bucket policies and replace t
 The same happens with roles, except it displays `AROAxxxxxxxxxxxxxxxxx`
 
 Access within the same account will break if it is granted using the bucket policy (and not an identity-based policy). But typically, same-account s3 access is granted using identity-based policies and not bucket policies, so access will not break in most cases.
+
+#### AWS documentation is plain wrong
+
+[AWS documentation claims](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html):
+
+> Suppose that the employee named David leaves your company and you delete the corresponding IAM user. But later another employee named David starts and you create a new IAM user named David. If the bucket policy specifies the David IAM user, the policy allows the new David to access information that was left by the former David.
+
+I have tested this, and it is incorrect. If you view the bucket policy, it will show the old Principal ID. 
 
 ### You can't create a bucket policy before you've created the principal that is granted access
 
@@ -316,3 +327,8 @@ AWS advertises Canonical IDs (`1234567890abcdef1234567890abcdef1234567890abcdef1
 
 But this doesn't actually work. All you have to do is save the Canonical ID in a bucket policy, and next time you view the policy, [AWS will helpfully convert it back into an account ARN with an account number.](https://docs.amazonaws.cn/en_us/AmazonS3/latest/dev/s3-bucket-user-policy-specifying-principal-intro.html) Nifty!
 
+## Conclusion
+
+AWS works in arcane ways. It is almost certain that you will find every idiosyncracy of the system documented somewhere, but it is just as certain that it *will not be in the first place you're looking*. You may find confusing and contradictory documentation. If you're about to make a mission-critical change, open an AWS support ticket and get the correct team, in this case, s3, to explicitly tell you what will happen (they might still be wrong!), because whatever happens, it will be a surprise to everyone.
+
+To everyone, that is, except the engineer at AWS who wrote that one line of code...
