@@ -99,7 +99,7 @@ Situation | Outcome (Same AWS account)
 No identity policy exists, no resource policy exists | No access
 Identity policy only | Access according to identity policy
 Resource policy only | Access according to resource policy
-Both identity and resource policies | UNION of access of identity and resource policies
+Both identity and resource policies | UNION of access of identity and resource policies (except if there's an explicit deny or other edge cases)
 
 And for access into a different account (known as "cross-account" access):
 
