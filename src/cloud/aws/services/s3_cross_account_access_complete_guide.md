@@ -1,4 +1,10 @@
-# Table of Contents
+# A Complete Guide to S3 Cross-Account Access and Security Pitfalls
+
+Have you ever encountered a 500 "Please try again later" error when setting an s3 bucket policy? Ever wondered why you got "Invalid principal" when writing a bucket policy, even though there's nothing obviously wrong? Why is that one old bucket showing access to `AIDAXYZTABCDEFGHIJK` when you've clearly never put anything like that in? And what the hell is a Canonical ID?
+
+AWS's documentation is often confusing and contradictory. Let's take a deeper dive.
+
+## Table of Contents
 
 * [A necessary refresher: how access works in AWS, and why cross-account access is different](#a-necessary-refresher--how-access-works-in-aws--and-why-cross-account-access-is-different)
     + [IAM policies](#iam-policies)
@@ -22,12 +28,6 @@
     + [Explicit denies will stop working if the principal is deleted and recreated](#explicit-denies-will-stop-working-if-the-principal-is-deleted-and-recreated)
     + [Canonical IDs offer no extra security](#canonical-ids-offer-no-extra-security)
 * [Conclusion](#conclusion)
-
-# A Complete Guide to S3 Cross-Account Access and Security Pitfalls
-
-Have you ever encountered a 500 "Please try again later" error when setting an s3 bucket policy? Ever wondered why you got "Invalid principal" when writing a bucket policy, even though there's nothing obviously wrong? Why is that one old bucket showing access to `AIDAXYZTABCDEFGHIJK` when you've clearly never put anything like that in? And what the hell is a Canonical ID?
-
-AWS's documentation is often confusing and contradictory. Let's take a deeper dive.
 
 ## A necessary refresher: how access works in AWS, and why cross-account access is different
 
