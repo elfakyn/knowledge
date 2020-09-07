@@ -260,9 +260,9 @@ The same happens with roles, except it displays `AROAxxxxxxxxxxxxxxxxx`
 
 Access within the same account will break if it is granted using the bucket policy (and not an identity-based policy). But typically, same-account s3 access is granted using identity-based policies and not bucket policies, so access will not break in most cases.
 
-#### AWS documentation is plain wrong
+#### The AWS documentation is plain wrong
 
-[AWS documentation claims](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html):
+[The AWS documentation claims](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-unique-ids):
 
 > Suppose that the employee named David leaves your company and you delete the corresponding IAM user. But later another employee named David starts and you create a new IAM user named David. If the bucket policy specifies the David IAM user, the policy allows the new David to access information that was left by the former David.
 
