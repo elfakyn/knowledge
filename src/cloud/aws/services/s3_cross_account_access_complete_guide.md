@@ -333,6 +333,4 @@ But this doesn't actually work. All you have to do is save the Canonical ID in a
 
 AWS works in arcane ways. It is almost certain that you will find every idiosyncracy of the system documented somewhere, but it is just as certain that it *will not be in the first place you're looking*. You may find confusing and contradictory documentation.
 
-If you're about to make a mission-critical change, open an AWS support ticket and get the correct team, in this case, s3, to explicitly tell you what will happen (they might still be wrong!), because whatever happens, it will be a surprise to everyone.
-
-To everyone, that is, except the engineer at AWS who wrote that one line of code...
+If you're about to make a mission-critical change, open an AWS support ticket and get the correct team, in this case, s3, to explicitly tell you what will happen (they might still be wrong!). Because whatever happens, it will be a surprise to everyone.
