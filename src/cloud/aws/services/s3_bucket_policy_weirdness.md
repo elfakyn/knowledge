@@ -1,4 +1,4 @@
-# What You See is Not What You Get: An Extensive Guide to Weird Behaviors and Security Pitfalls in S3 Bucket Policies
+# What You See is Not What You Get: Weird Behaviors in S3 Bucket Policies
 
 Have you ever seen an S3 bucket policy change itself with no human intervention?
 
