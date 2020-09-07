@@ -1,0 +1,318 @@
+# Table of Contents
+
+  * [A necessary refresher: how access works in AWS, and why cross-account access is different](#a-necessary-refresher--how-access-works-in-aws--and-why-cross-account-access-is-different)
+    + [IAM policies](#iam-policies)
+    + [Examples](#examples)
+    + [How policies interact](#how-policies-interact)
+  * [What AWS tells you...](#what-aws-tells-you)
+    + [How to grant cross-account access](#how-to-grant-cross-account-access)
+    + [Example](#example)
+  * [What AWS doesn't tell you: how bucket policies ACTUALLY work](#what-aws-doesn-t-tell-you--how-bucket-policies-actually-work)
+    + [Saving and retrieving bucket policies](#saving-and-retrieving-bucket-policies)
+    + [AWS's internal representation](#aws-s-internal-representation)
+  * [So what's the problem?](#so-what-s-the-problem-)
+    + [If a user is deleted, all bucket policies with that user will appear to have changed](#if-a-user-is-deleted--all-bucket-policies-with-that-user-will-appear-to-have-changed)
+    + [If you delete a user/role and create one with the same ARN, all cross-account access will break](#if-you-delete-a-user-role-and-create-one-with-the-same-arn--all-cross-account-access-will-break)
+    + [You can't create a bucket policy before you've created the principal that is granted access](#you-can-t-create-a-bucket-policy-before-you-ve-created-the-principal-that-is-granted-access)
+    + [Certain bucket policies will result in a cryptic 500 error](#certain-bucket-policies-will-result-in-a-cryptic-500-error)
+  * [Security Implications](#security-implications)
+    + [Brute-forcing valid principal names is possible](#brute-forcing-valid-principal-names-is-possible)
+    + [User compromise will break cross-account access](#user-compromise-will-break-cross-account-access)
+    + [Explicit denies will stop working if the principal is deleted and recreated](#explicit-denies-will-stop-working-if-the-principal-is-deleted-and-recreated)
+    + [Canonical IDs offer no extra security](#canonical-ids-offer-no-extra-security)
+
+# A Complete Guide to S3 Cross-Account Access and Security Pitfalls
+
+Have you ever encountered a 500 "Please try again later" error when setting an s3 bucket policy? Ever wondered why you got "Invalid principal" when writing a bucket policy, even though there's nothing obviously wrong? Why is that one old bucket showing access to `AIDAXYZTABCDEFGHIJK` when you've clearly never put anything like that in? And what the hell is a Canonical ID?
+
+AWS's documentation is often confusing and contradictory. Let's take a deeper dive.
+
+## A necessary refresher: how access works in AWS, and why cross-account access is different
+
+Feel free to skip this if you have a really good understanding of AWS access.
+
+Humans or automations do stuff in AWS.
+
+### IAM policies
+
+For the purpose of access control, there are entities which perform actions, known as "principals", and entities that are the targets or actions, known as "resources". Some entities (such as IAM roles) can act as either principals or resources depending on context.
+
+For the most part, you use "IAM policies" to control access (the following is a bit simplified):
+
+* Identity-based policies: an identity-based policy (also called a "principal-based" policy) is "attached" to a principal and grants or denies the principal access to one or more resources.
+* Resource-based policies: a resource-based policy is "attached" to a resource and grants or denies one or more principals access to the resource
+
+When you have both an identity policy and a resource policy, the resulting access depends on whether the principal and resource are both in the same AWS account or are in different AWS accounts.
+
+### Examples
+
+Here's an identity-based policy that is attached to an EC2 instance and allows it to assume a certain role. This identity-based policy only grants access to the EC2 instance that it is attached to. If you want other EC2 instances to have this permission, you need to attach it to those as well.
+
+```json
+{ 
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::111111111111:role/ROLENAME"
+        }
+    ]
+}
+```
+
+Here's a resource-based policy that is attached to a SecretsManager secret. This grants access to the `anaya` user to that secret. **I know it says `"Resource": "*"` but because this is attached to a single SecretsManager secret, the policy only grants access to that secret, not all secrets.** To grant access to more secrets, you need to attach the policy to those as well.
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "secretsmanager:*",
+            "Principal": {"AWS": "arn:aws:iam::123456789012:user/anaya"},
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+### How policies interact
+
+Here's a summary of how identity and resource policies interact where the access is within the same AWS account:
+
+Situation | Outcome (Same AWS account)
+---|---
+No identity policy exists, no resource policy exists | No access
+Identity policy only | Access according to identity policy
+Resource policy only | Access according to resource policy
+Both identity and resource policies | UNION of access of identity and resource policies
+
+And for access into a different account (known as "cross-account" access):
+
+Situation | Outcome (Cross-account access)
+---|---
+No identity policy exists, no resource policy exists | No access
+Identity policy only | No access
+Resource policy only | No access
+Both identity and resource policies | INTERSECTION of access of identity and resource policies
+
+N.B. Specifically for cross-account access, you can specify an entire AWS account (e.g. `arn:aws:iam::123456789012:root`) in a resource policy to grant access to *all* resources in that account. You still need a corresponding identity policy for the access to take effects, as it is still the intersection of access. An AWS account can be referenced by the account ARN, which contains the account number (`arn:aws:iam::123456789012:root`) or by a "Canonical ID" (`1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`). The Canonical ID is an obfuscated form of an AWS account ARN and otherwise acts the same.
+
+Further reading on policies:
+* [Identity-based policies and resource-based policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html)
+* [Policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html)
+* [Cross-account policy evaluation logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic-cross-account.html)
+
+## What AWS tells you...
+
+### How to grant cross-account access
+
+[This is what AWS tells you you should do to grant cross-account access to an s3 bucket](https://aws.amazon.com/premiumsupport/knowledge-center/cross-account-access-s3/):
+
+1. Create a Bucket in Account A and a User in Account B
+1. Create an identity policy that allows the User in Account B access to the Bucket in Account A. Attach it to the User in Account B.
+1. Create a resource policy ("bucket policy") that allows the User in Account B access to the Bucket in Account A. Attach it to the Bucket in Account A.
+1. Done!
+
+### Example
+
+This is what AWS tells you to attach to User B:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+  "s3:PutObject",
+  "s3:PutObjectAcl"
+            ],
+            "Resource": "arn:aws:s3:::AccountABucketName/*"
+ 
+        }
+    ]
+}
+```
+
+And this is what AWS tells you to attach to bucket A:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::AccountB:user/AccountBUserName"
+            },
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::AccountABucketName/*"
+            ]
+        }
+    ]
+}
+```
+
+Further discussion on identity-based policies work is outside the scope of this document. Bucket policies are where things can go very, very wrong, in non-obvious ways.
+
+## What AWS doesn't tell you: how bucket policies ACTUALLY work
+
+**The JSON that you've seen so far for bucket policies is not the actual internal representation of a bucket policy.** In a bucket policy, what you see is not what you actually get, and this is the source of many problems.
+
+### Saving and retrieving bucket policies
+
+When you click "save" on a bucket policy:
+
+1. AWS performs basic validation on the policy (JSON is valid, the bucket ARN is correct etc.)
+1. AWS reads the bucket policy and validates if all the principals in the policy exist. If any of the principals fail to validate, you get the error "Invalid Principal in Policy"
+1. AWS converts all the principal ARNs into a special backend representation:
+    1. For users and roles, it looks up the user/role arn and converts them into a "Principal ID". 
+    1. For AWS accounts, it looks up the AWS account number and converts it into a Canonical ID.
+1. AWS stores the converted bucket policy.
+
+When you want to see a bucket policy:
+1. AWS reads the bucket policy and converts all the special backend representation IDs back into ARNs. If any conversion fails (e.g. a user no longer exists), it skips it.
+1. AWS displays to you the resulting bucket policy.
+
+### AWS's internal representation
+
+What you see | What AWS stores internally
+--- | ---
+`arn:aws:iam::123456789012:user/SomeUser` | `AIDAxxxxxxxxxxxxxxxxx` (a user Principal ID)
+`arn:aws:iam::123456789012:role/SomeRole` | `AROAxxxxxxxxxxxxxxxxx` (a role Principal ID)
+`arn:aws:iam::123456789012:root` | `1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef` (a Canonical ID)
+
+Further reading:
+
+* [Finding your account canonical ID](https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html#findingcanonicalid)
+* [Principal IDs, and AWS warnings on how cross-account access will break](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html) This is a fairly obscure piece of documentation.
+
+## So what's the problem?
+
+### If a user is deleted, all bucket policies with that user will appear to have changed
+
+Let's say you have this bucket policy:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::123456789012:user/Test"
+            },
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": "arn:aws:s3:::TestyMcTestFace"
+        }
+    ]
+}
+```
+
+And now you delete user `Test`. The bucket policy will now show
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "AIDAxxxxxxxxxxxxxxxxx"
+            },
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": "arn:aws:s3:::elfakyn-testytest"
+        }
+    ]
+}
+```
+
+
+### If you delete a user/role and create one with the same ARN, all cross-account access will break
+
+All users have an internal unique ID, called a "Principal ID" (of the form `AIDAxxxxxxxxxxxxxxxxx`), that is distinct from the ARN of the user. When you delete a user and create one with the same ARN, its Principal ID changes.
+
+Any cross-account bucket policies use the Principal ID and not the ARN to grant access. When the user is deleted and recreated:
+
+1. Cross-account access will break
+1. Cross-account bucket policies will now display `AIDAxxxxxxxxxxxxxxxxx` instead of the user ARN
+
+To fix the problem, you have to manually go to all bucket policies and replace them with the user ARN all over again.
+
+The same happens with roles, except it displays `AROAxxxxxxxxxxxxxxxxx`
+
+Access within the same account will break if it is granted using the bucket policy (and not an identity-based policy). But typically, same-account s3 access is granted using identity-based policies and not bucket policies, so access will not break in most cases.
+
+### You can't create a bucket policy before you've created the principal that is granted access
+
+This one is pretty self-explanatory. If a principal does not exist when you create the policy, it will return an Invalid Principal error. That means that, if you grant access to a third party via a bucket policy, you'll have to coordinate such that the principal is created first.
+
+### Certain bucket policies will result in a cryptic 500 error
+
+If a bucket policy is invalid in such a way that it breaks the parsing logic, it will return a 500 error instead of anything useful. Here's one such example: 
+
+```json
+{
+    "Version": "2012-10-17",
+    "Id": "whatever",
+    "Statement": [
+        {
+            "Sid": "ReadOnly",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": []
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::my-bucket/*"
+        }
+    ]
+}
+```
+
+[Read more here.](./s3_bucket_policy_500_errors.md)
+
+If you have any automation that handles bucket policies, you need to be able to handle such errors.
+
+## Security Implications
+
+### Brute-forcing valid principal names is possible
+
+You can use this mechanism to brute force valid AWS accounts as well as valid principals within an AWS account (such as user names). To do this, simply attempt to apply a bucket policy. If the principal is valid, it will apply successfully. If the principal doesn't exist, it will fail. AWS knows about this issue and it is intended behavior, so don't go submitting a bug report on this one; I already did, and they WontFix.
+
+Principal names may reveal potentially sensitive information such as:
+
+* Who works for your company
+* What clients you do business with
+* What technologies you use
+* If you do anything sketchy security-wise (such as all-powerful machine users)
+
+### User compromise will break cross-account access
+
+If the credentials for an AWS user are compromised, AWS will automatically quarantine the user (they monitor places like GitHub for leaks) and the AWS Abuse Team will ABSOLUTELY INSIST that you delete the user and create a new one (in the strongest possible terms: "You're in violation of our TOS, you must absolutely delete this user, you have no choice").
+
+You are allowed to create a new user with the same name and ARN, but cross-account access will still break. If this cross-account access involves third parties, you're in for an awkward conversation...
+
+### Explicit denies will stop working if the principal is deleted and recreated
+
+If you rely on explicit denies on a bucket policy to deny access to specific principals (such as users or roles), those explicit denies will stop working if the principals are deleted and recreated, since they refer to the old Principal ID.
+
+### Canonical IDs offer no extra security
+
+AWS advertises Canonical IDs (`1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`) as obfuscated versions of an AWS account ARN (`arn:aws:iam::123456789012:root`). If you want to give a third party your account ARN (for instance, so they can create a cross-account bucket policy granting it access), but don't want to divulge your account number, you can give them the Canonical ID.
+
+But this doesn't actually work. All you have to do is save the Canonical ID in a bucket policy, and next time you view the policy, [AWS will helpfully convert it back into an account ARN with an account number.](https://docs.amazonaws.cn/en_us/AmazonS3/latest/dev/s3-bucket-user-policy-specifying-principal-intro.html) Nifty!
+
