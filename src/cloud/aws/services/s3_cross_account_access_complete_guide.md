@@ -6,8 +6,9 @@ AWS's documentation is confusing and contradictory on this matter. Let's take a 
 
 ## Table of Contents
 
+
   * [Table of Contents](#table-of-contents)
-  * [A necessary refresher: how access works in AWS](#a-necessary-refresher--how-access-works-in-aws)
+  * [A necessary refresher: how access works in AWS, and why cross-account access is different](#a-necessary-refresher-how-access-works-in-aws-and-why-cross-account-access-is-different)
     + [IAM policies](#iam-policies)
     + [Examples](#examples)
     + [How policies interact](#how-policies-interact)
@@ -29,6 +30,8 @@ AWS's documentation is confusing and contradictory on this matter. Let's take a 
     + [Explicit denies will stop working if the principal is deleted and recreated](#explicit-denies-will-stop-working-if-the-principal-is-deleted-and-recreated)
     + [Canonical IDs offer no extra security](#canonical-ids-offer-no-extra-security)
   * [Conclusion](#conclusion)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 ## A necessary refresher: how access works in AWS
 
