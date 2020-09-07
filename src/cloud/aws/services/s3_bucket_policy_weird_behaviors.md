@@ -28,6 +28,7 @@ AWS's documentation is confusing and contradictory on this matter. Let's take a 
     + [AWS's internal representation](#awss-internal-representation)
   * [So what's the problem?](#so-whats-the-problem)
     + [If a user is deleted, all bucket policies with that user will appear to have changed](#if-a-user-is-deleted-all-bucket-policies-with-that-user-will-appear-to-have-changed)
+    + [You cannot edit a bucket policy that references a deleted principal](#you-cannot-edit-a-bucket-policy-that-references-a-deleted-principal)
     + [If you delete a user/role and create one with the same ARN, all resource-based access will break](#if-you-delete-a-userrole-and-create-one-with-the-same-arn-all-resource-based-access-will-break)
         - [The AWS documentation is plain wrong](#the-aws-documentation-is-plain-wrong)
     + [You can't create a bucket policy before you've created the principal that is granted access](#you-cant-create-a-bucket-policy-before-youve-created-the-principal-that-is-granted-access)
@@ -194,7 +195,13 @@ When you want to see a bucket policy:
 1. AWS reads the bucket policy and converts all the special backend representation IDs back into ARNs. If any conversion fails (e.g. a user no longer exists), it skips it.
 1. AWS displays to you the resulting bucket policy.
 
+These behaviors are specific for bucket policies. Other types of resource-based policies may or may not behave completely differently (like SecretsManager resource policies or assume role policies).
+
 ### AWS's internal representation
+
+All users have an internal unique ID, called a "Principal ID" (of the form `AIDAxxxxxxxxxxxxxxxxx`), that is distinct from the ARN of the user.
+
+All accounts have a unique ID called a "Canonical ID" that is distinct from the account number (but behaves the exact same).
 
 What you see | What AWS stores internally
 --- | ---
@@ -256,10 +263,15 @@ And now you delete user `Test`. The bucket policy will now show
 
 The bucket policy never actually changed. It is now displayed differently to you because the internally-stored ID can no longer be converted back into an ARN for display purposes.
 
+### You cannot edit a bucket policy that references a deleted principal
+
+Because there is validation every time you save a bucket policy, if the bucket policy references a deleted principal, it will error with "Invalid Principal" every time you try to edit it. You actually have to fix the invalid principal before you can save the policy.
+
+But as long as you don't edit it, it will remain with an invalid principal without any issues.
 
 ### If you delete a user/role and create one with the same ARN, all resource-based access will break
 
-All users have an internal unique ID, called a "Principal ID" (of the form `AIDAxxxxxxxxxxxxxxxxx`), that is distinct from the ARN of the user. When you delete a user and create one with the same ARN, its Principal ID changes.
+When you delete a user and create one with the same ARN, its Principal ID (`AIDAxxxxxxxxxxxxxxxxx`) changes.
 
 Any cross-account bucket policies use the Principal ID and not the ARN to grant access. When the user is deleted and recreated:
 
