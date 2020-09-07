@@ -6,7 +6,7 @@ Have you ever encountered a 500 "Please try again later" error when setting an s
 
 Ever wondered why you got "Invalid Principal" when writing a bucket policy, even though there's nothing obviously wrong?
 
-Why is that one old bucket showing access to `AIDAXYZTABCDEFGHIJK` when you've clearly never put anything like that in?
+Why is that one old bucket showing access to `AIDAXYZTABCDEFGHIJK` when you clearly didn't do that?
 
 And what the hell is a Canonical ID?
 
