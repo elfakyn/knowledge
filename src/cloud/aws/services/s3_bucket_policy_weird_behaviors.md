@@ -110,7 +110,7 @@ Identity policy only | No access
 Resource policy only | No access
 Both identity and resource policies | INTERSECTION of access of identity and resource policies
 
-N.B. Specifically for cross-account access, you can specify an entire AWS account (e.g. `arn:aws:iam::123456789012:root`) in a resource policy to grant access to *all* resources in that account. You still need a corresponding identity policy for the access to take effects, as it is still the intersection of access. An AWS account can be referenced by the account ARN, which contains the account number (`arn:aws:iam::123456789012:root`) or by a "Canonical ID" (`1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`). The Canonical ID is an obfuscated form of an AWS account ARN and otherwise acts the same.
+N.B. Specifically for cross-account access, you can specify an entire AWS account (e.g. `arn:aws:iam::123456789012:root`) in a resource policy to grant access to *all* principals in that account. You still need a corresponding identity policy for the access to take effects, as it is still the intersection of access. An AWS account can be referenced by the account ARN, which contains the account number (`arn:aws:iam::123456789012:root`) or by a "Canonical ID" (`1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`). The Canonical ID is an obfuscated form of an AWS account ARN and otherwise acts the same.
 
 Further reading on policies:
 * [Identity-based policies and resource-based policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_identity-vs-resource.html)
