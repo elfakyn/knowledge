@@ -17,7 +17,7 @@ AWS's documentation is confusing and contradictory on this matter. Let's take a 
 
   * [Table of Contents](#table-of-contents)
   * [A necessary refresher: how access works in AWS, and why cross-account access is different](#a-necessary-refresher-how-access-works-in-aws-and-why-cross-account-access-is-different)
-    + [IAM policies](#iam-policies)
+    + [IAM policies: principals and resources](#iam-policies-principals-and-resources)
     + [Examples](#examples)
     + [How policies interact](#how-policies-interact)
   * [What AWS tells you...](#what-aws-tells-you)
