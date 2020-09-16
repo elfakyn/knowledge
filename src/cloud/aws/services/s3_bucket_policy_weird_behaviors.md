@@ -44,9 +44,18 @@ AWS's documentation is confusing and contradictory on this matter. Let's take a 
 
 Feel free to skip this if you have a really good understanding of AWS access.
 
-Humans or automations do stuff in AWS.
+Humans or automations do stuff in AWS. For that, they need permissions.
 
-### IAM policies
+These permissions are encoded in "policies", which are JSON documents. [Policies are really complicated](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html), but in a simplified way they have a list of statements. Each statement has:
+* A list of actions
+* If the actions are `Allow`ed or `Deny`ed
+* Who is allowed (or denied) to perform those actions
+* What the targets of the actions can (or cannot) be
+* Optionally, any additional conditions that need to apply
+
+See "Examples" below and [a whole bunch of examples from AWS here](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_examples.html).
+
+### IAM policies: principals and resources
 
 For the purpose of access control, there are entities which perform actions, known as "principals", and entities that are the targets or actions, known as "resources". Some entities (such as IAM roles) can act as either principals or resources depending on context.
 
