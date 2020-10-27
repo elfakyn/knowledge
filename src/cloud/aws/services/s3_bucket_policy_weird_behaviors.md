@@ -345,6 +345,7 @@ Principal names may reveal potentially sensitive information such as:
 * What clients you do business with
 * What technologies you use
 * If you do anything sketchy security-wise (such as all-powerful machine users)
+* Potential vulnerabilities
 
 ### User compromise will break cross-account access
 
