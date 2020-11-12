@@ -199,26 +199,29 @@ When you click "save" on a bucket policy:
 1. AWS reads the bucket policy and validates if all the principals in the policy exist. If any of the principals fail to validate, you get the error "Invalid Principal in Policy"
 1. AWS converts all the principal ARNs into a special backend representation:
     1. For users and roles, it looks up the user/role arn and converts them into a "Principal ID". 
-    1. For AWS accounts, it looks up the AWS account number and converts it into a Canonical ID.
+    1. For AWS accounts, it looks up the AWS account number (or Canonical ID) and converts it into some internal representation.
+    1. This conversion *does not happen inside Condition Keys*, only in the Principal section.
 1. AWS stores the converted bucket policy.
 
 When you want to see a bucket policy:
-1. AWS reads the bucket policy and converts all the special backend representation IDs back into ARNs. If any conversion fails (e.g. a user no longer exists), it skips it.
+1. AWS reads the bucket policy and converts all the special backend representation IDs in the Principal section back into ARNs. If any conversion fails (e.g. a user no longer exists), it skips it.
 1. AWS displays to you the resulting bucket policy.
 
-These behaviors are specific for bucket policies. Other types of resource-based policies may or may not behave completely differently (like SecretsManager resource policies or assume role policies).
+~~These behaviors are specific for bucket policies. Other types of resource-based policies may or may not behave completely differently (like SecretsManager resource policies or assume role policies).~~
+
+These behaviors "should" apply for *all resource policies*.
 
 ### AWS's internal representation
 
 All users have an internal unique ID, called a "Principal ID" (of the form `AIDAxxxxxxxxxxxxxxxxx`), that is distinct from the ARN of the user.
 
-All accounts have a unique ID called a "Canonical ID" that is distinct from the account number (but behaves the exact same).
+All accounts have a unique ID called a "Canonical ID" that is distinct from the account number (but behaves the exact same). The account number is preferred by AWS over the Canonical ID. In fact, if you put in a Canonical ID in a bucket policy, AWS will display the account number next time you open the policy.
 
 What you see | What AWS stores internally
 --- | ---
 `arn:aws:iam::123456789012:user/SomeUser` | `AIDAxxxxxxxxxxxxxxxxx` (a user Principal ID)
 `arn:aws:iam::123456789012:role/SomeRole` | `AROAxxxxxxxxxxxxxxxxx` (a role Principal ID)
-`arn:aws:iam::123456789012:root` | `1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef` (a Canonical ID)
+`arn:aws:iam::123456789012:root` | A unique identifier per account (that is not the Canonical ID)
 
 Further reading:
 
@@ -228,7 +231,7 @@ Further reading:
 
 ## So what's the problem?
 
-### If a user is deleted, all bucket policies with that user will appear to have changed
+### If a user is deleted, all bucket policies with that user as aprincipal will appear to have changed
 
 Let's say you have this bucket policy:
 
@@ -333,6 +336,10 @@ If a bucket policy is invalid in such a way that it breaks the internal validato
 
 If you have any automation that handles bucket policies, you need to be able to handle such errors.
 
+## Workaround by using condition keys
+
+You can choose to instead use [a PrincipalArn inside a Condition Key](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html#condition-keys-principalarn). These do not get converted internally, so will remain valid even if the principal is deleted and recreated. This means, however, that the above David scenario may happen. If the principal is deleted and a new principal with the same ARN is created, you might not actually want access to persist. It depends on your use case.
+
 ## Security Implications
 
 ### Brute-forcing valid principal names is possible
@@ -359,7 +366,7 @@ If you rely on explicit denies on a bucket policy to deny access to specific pri
 
 ### Canonical IDs offer no extra security
 
-AWS advertises Canonical IDs (`1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`) as obfuscated versions of an AWS account ARN (`arn:aws:iam::123456789012:root`). If you want to give a third party your account ARN (for instance, so they can create a cross-account bucket policy granting it access), but don't want to divulge your account number, you can give them the Canonical ID.
+AWS advertises Canonical IDs (`1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef`) as obfuscated versions of an AWS account ARN (`arn:aws:iam::123456789012:root`). If you want to give a third party your account ARN (for instance, so they can create a cross-account bucket policy granting it access), but don't want to divulge your account number, you can give them the Canonical ID, or so the story goes.
 
 But this doesn't actually work. All you have to do is save the Canonical ID in a bucket policy, and next time you view the policy, [AWS will helpfully convert it back into an account ARN with an account number.](https://docs.amazonaws.cn/en_us/AmazonS3/latest/dev/s3-bucket-user-policy-specifying-principal-intro.html) Nifty!
 
