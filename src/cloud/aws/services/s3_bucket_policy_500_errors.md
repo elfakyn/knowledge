@@ -44,7 +44,7 @@ What the issue is:
 * You are trying to put a bucket policy that grants cross-account access to the bucket
 
 Why this happens:
-* It's likely a bug, and may have been fixed since. [READ MORE HERE](./s3_public_access_block.md)
+* It's likely a bug, and may have been fixed since.
 
 ### How to fix
 
