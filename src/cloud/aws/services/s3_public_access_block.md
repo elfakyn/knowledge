@@ -9,7 +9,9 @@ Block public access to buckets and objects granted through any access control li
 Block public access to buckets and objects granted through new public bucket policies | BlockPublicPolicy | Can't create new public bucket policies (it will error out if you try).
 Block public and cross-account access to buckets and objects through any public bucket policies | RestrictPublicBuckets | This is weird. If your bucket policy has a public statement, then it will ignore both public and cross-account statements. Explanation below.
 
-Check all 4 boxes unless you are encountering issues with cross-account access, in which case disable RestrictPublicBuckets.
+If you don't want public access, check all 4 boxes. If you are encountering issues with cross-account access, verify that there isn't a public statement on the bucket.
+
+I would **strongly discourage** you to put private objects and public objects in the same bucket; it's a disaster waiting to happen. Use different buckets, even if it will take some effort to make that possible. AWS makes it extremely easy to mess up access control if all your objects are in the same bucket, and public buckets are a frighteningly common source of data breaches. Don't take the risk!
 
 ## What does RestrictPublicBuckets do?
 
